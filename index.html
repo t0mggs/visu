@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <!-- Bootstrap CSS -->
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          crossorigin="anonymous"
+        />
+        
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.min.css"
+          integrity="sha512-6QxSiaKfNSQmmqwqpTNyhHErr+Bbm8u8HHSiinMEz0uimy9nu7lc/2NaXJiUJj2y4BApd5vgDjSHyLzC8nP6Ng=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+        />
+        <link href="assets/png/icon-192x192.png" rel="icon" type="image/x-icon" />
+
+        <title>VisuBloq</title>
+
+        <meta property="og:title" content="VisuBloq" />
+        <meta property="og:image" content="assets/png/icon-960x960.png" />
+        <meta property="og:description" content="Herramienta de Creación Visual" />
+        <meta name="description" content="Herramienta de Creación Visual" />
+        <meta name="thumbnail" content="assets/png/icon-512x512.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="manifest" href="/manifest.json" />
+
+        <PageMap>
+          <DataObject type="thumbnail">
+            <Attribute name="src" value="assets/png/icon-512x512.png" />
+            <Attribute name="width" value="512" />
+            <Attribute name="height" value="512" />
+          </DataObject>
+        </PageMap>
+
+        <style>
+          /* Layout principal responsivo */
+          #steps-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            min-height: 100vh;
+            gap: 32px;
+          }
+          #step-1, #step-4 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            box-sizing: border-box;
+          }
+          @media (max-width: 768px) {
+            #steps-row {
+              flex-direction: column;
+              align-items: center;
+              gap: 0;
+            }
+            #step-1, #step-4 {
+              max-width: 98vw !important;
+              width: 98vw !important;
+              margin: 0 auto !important;
+              min-height: unset;
+            }
+            .card {
+              margin-bottom: 16px !important;
+              padding: 8px !important;
+            }
+          }
+          /* Botón LISTO premium */
+          .btn-primary-custom {
+            background: linear-gradient(135deg, #000 0%, #333 100%) !important;
+            border: none !important;
+            color: #fff !important;
+            font-family: 'Dortmund', Arial, sans-serif !important;
+            font-weight: bold !important;
+            font-size: 1.1em !important;
+            letter-spacing: 0.1em !important;
+            padding: 14px 32px !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            text-transform: uppercase !important;
+            min-width: 140px !important;
+          }
+          .btn-primary-custom:hover {
+            background: linear-gradient(135deg, #333 0%, #666 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.3) !important;
+            color: #fff !important;
+          }
+          .btn-primary-custom:active {
+            transform: translateY(0) scale(0.98) !important;
+            transition: all 0.1s ease !important;
+          }
+          .btn-primary-custom:focus {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 0 0 3px rgba(0,0,0,0.1) !important;
+            outline: none !important;
+          }
+
+          /* Botones y controles táctiles */
+          .btn, .btn-link, button {
+            min-width: 40px;
+            min-height: 40px;
+            font-size: 1rem;
+            border-radius: 6px;
+            background: #fff;
+            color: #222;
+            border: 1px solid #e0e0e0;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+          }
+          .btn:hover, .btn:focus {
+            background: #f5f5f5;
+            color: #111;
+            border: 1px solid #bdbdbd;
+          }
+          .btn-info, .btn-success, .btn-warning {
+            background: #fff !important;
+            color: #222 !important;
+            border: 1px solid #e0e0e0 !important;
+          }
+          .btn-info:hover, .btn-success:hover, .btn-warning:hover {
+            background: #f5f5f5 !important;
+            color: #111 !important;
+            border: 1px solid #bdbdbd !important;
+          }
+          /* Icono minimalista para botón EDIT */
+          #step-1-edicion-heading img {
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            background: #fafafa;
+            padding: 2px;
+            box-shadow: none;
+          }
+          /* Marco alrededor de la imagen principal - Premium */
+          .main-image-frame {
+            border: 3px solid #222;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+            padding: 16px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+          }
+          .main-image-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #000 0%, #666 50%, #000 100%);
+            opacity: 0.6;
+          }
+          .main-image-frame:hover {
+            box-shadow: 0 12px 48px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+            border-color: #000;
+          }
+          /* Canvas responsivos */
+          canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+          }
+          /* Cards y contenedores */
+          .card {
+            background-color: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+            padding: 16px;
+          }
+          /* Eliminar estilos innecesarios y duplicados */
+          /* ...resto de estilos existentes y personalizados... */
+          /* Ensure custom slider styling applies in Chromium browsers (Opera GX, Chrome, Edge) */
+          input[type=range] {
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            background: transparent !important;
+            width: 100%;
+            height: 32px;
+          }
+          input[type=range]:focus {
+            outline: none;
+          }
+          input[type=range]::-webkit-slider-runnable-track {
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+          }
+          input[type=range]::-moz-range-track {
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+          }
+          input[type=range]::-ms-fill-lower,
+          input[type=range]::-ms-fill-upper {
+            background: #ddd;
+            border-radius: 4px;
+          }
+          /* Custom slider thumb for all sliders */
+          input[type=range]::-webkit-slider-thumb {
+            width: 32px;
+            height: 32px;
+            background: url('assets/png/slider.png') no-repeat center center !important;
+            background-size: contain !important;
+            background-color: #eee !important;
+            border: none !important;
+            box-shadow: none !important;
+            cursor: pointer !important;
+          }
+          input[type=range]::-moz-range-thumb {
+            width: 32px;
+            height: 32px;
+            background: url('assets/png/slider.png') no-repeat center center !important;
+            background-size: contain !important;
+            background-color: #eee !important;
+            border: none !important;
+            box-shadow: none !important;
+            cursor: pointer !important;
+          }
+          input[type=range]::-ms-thumb {
+            width: 32px;
+            height: 32px;
+            background: url('assets/png/slider.png') no-repeat center center !important;
+            background-size: contain !important;
+            background-color: #eee !important;
+            border: none !important;
+            box-shadow: none !important;
+            cursor: pointer !important;
+          }
+          /* ---- FIX: Ocultar Step 3 ---- */
+    #step-3 > .card { 
+      display: none !important; 
+    }
+
+    #step-3 {
+      padding: 0 !important;
+      margin: 0 !important;
+      border: 0 !important;
+    }
+
+    @media (min-width: 768px) {
+      #step-1, #step-4 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+      }
+    }
+          /* Fuente Dortmund para VisuBloq */
+          @font-face {
+            font-family: 'Dortmund';
+            src: url('assets/fonts/Dortmund-ExtraBold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+          }
+          
+          /* Aplicar tipografía Dortmund a todos los elementos de texto */
+          body, h1, h2, h3, h4, h5, h6, .btn, small, p, span, div, label, td, th {
+            font-family: 'Dortmund', 'Arial Black', sans-serif;
+            font-weight: bold;
+          }
+          
+          a {
+            text-decoration: none !important;
+          }
+
+          /* All buttons white with black text */
+          .btn, .btn-link, button, .btn:focus, .btn:active, .btn:hover {
+            background: #fff !important;
+            color: #111 !important;
+            border-color: #fff !important;
+          }
+          .btn-link {
+            text-decoration: none !important;
+            width: 100%;
+            border-width: 0;
+          }
+
+          /* Cambiar botones verdes a esquema blanco y negro */
+          .btn-success {
+            background-color: #000000;
+            border-color: #000000;
+            color: #ffffff;
+          }
+
+          .btn-success:hover {
+            background-color: #333333;
+            border-color: #333333;
+            color: #ffffff;
+          }
+
+          .btn-success:focus, .btn-success:active {
+            background-color: #000000;
+            border-color: #000000;
+            color: #ffffff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
+          }
+
+          /* Estilos personalizados para el botón principal SELECT IMAGE */
+          #input-image-selector {
+            background: transparent !important;
+            border: 2px solid #000000 !important;
+            color: #000000 !important;
+            font-family: 'Dortmund', Arial, sans-serif !important;
+            font-weight: bold !important;
+            padding: 12px 30px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            position: relative !important;
+            overflow: hidden !important;
+            margin: 0 auto !important;
+            display: block !important;
+            box-shadow: none !important;
+          }
+
+          #input-image-selector:hover {
+            background: #000000 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+          }
+
+          #input-image-selector:active {
+            transform: translateY(0) scale(0.98) !important;
+            transition: all 0.1s ease !important;
+            background: #000000 !important;
+            color: #ffffff !important;
+          }
+
+          #input-image-selector:focus {
+            background: transparent !important;
+            border-color: #000000 !important;
+            color: #000000 !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25) !important;
+            outline: none !important;
+          }
+
+          #input-image-selector:disabled {
+            background: transparent !important;
+            border-color: #cccccc !important;
+            color: #cccccc !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+            box-shadow: none !important;
+          }
+
+          /* Sobreescribir completamente los estilos btn-success para este botón específico */
+          #input-image-selector.btn-success {
+            background-color: transparent !important;
+            background-image: none !important;
+            background: transparent !important;
+            border-color: #000000 !important;
+            color: #000000 !important;
+          }
+
+          #input-image-selector.btn-success:hover {
+            background-color: #000000 !important;
+            background-image: none !important;
+            background: #000000 !important;
+            border-color: #000000 !important;
+            color: #ffffff !important;
+          }
+
+          #input-image-selector.btn-success:focus, 
+          #input-image-selector.btn-success:active {
+            background-color: transparent !important;
+            background-image: none !important;
+            background: transparent !important;
+            border-color: #000000 !important;
+            color: #000000 !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25) !important;
+          }
+
+          /* Animación de carga sutil */
+          .loading-animation {
+            animation: subtle-pulse 1.5s ease-in-out infinite !important;
+          }
+
+          @keyframes subtle-pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+          }
+
+          /* Contenedor centrado para el botón */
+          #image-input {
+            text-align: center !important;
+          }
+
+          .paintbrush-controls-button {
+            background-color: #f6f6f6;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            height: 100%;
+            margin-right: 4px;
+          }
+
+          .paintbrush-controls-button:hover:enabled {
+            background-color: #6c6c6c;
+          }
+
+          .card {
+            background-color: rgba(255, 255, 255, 0.6);
+          }
+
+          .card-header {
+            padding: 0;
+            border: 0;
+          }
+
+          .accordion-card {
+            margin-bottom: 4px;
+          }
+
+          .accordion-card-body {
+            padding: 4px;
+          }
+
+          h4 {
+            line-height: 20px;
+            margin-bottom: 0;
+          }
+
+          step-header-subtitle {
+            margin-left: 2px;
+          }
+
+          #nonzero-missing-pieces-warning {
+            color: #dc3545;
+          }
+
+          .checkbox-clickable {
+            cursor: pointer;
+          }
+
+          table {
+            border-top: 1px solid rgb(222, 226, 230);
+            border-left: 1px solid rgb(222, 226, 230);
+            border-bottom: 0;
+            border-right: 0;
+          }
+
+          td,
+          th {
+            border-top: 0;
+            border-left: 0;
+            border-bottom: 1px solid rgb(222, 226, 230);
+            border-right: 1px solid rgb(222, 226, 230);
+          }
+
+          .piece-count-infinity-placeholder {
+            padding-left: 2px;
+            padding-right: 2px;
+            font-weight: 600;
+            font-size: 18px;
+          }
+
+          .cropper-img {
+            display: block;
+
+            max-width: 100%;
+          }
+
+          .progress-bar.indeterminate {
+            position: relative;
+            animation: progress-indeterminate 3s linear infinite;
+          }
+
+          @keyframes progress-indeterminate {
+            from {
+              left: -50%;
+              width: 50%;
+            }
+
+            to {
+              left: 100%;
+              width: 50%;
+            }
+          }
+
+          footer {
+            bottom: 0;
+            width: 100%;
+          }
+
+          .footer {
+            height: 50px;
+            text-align: center;
+          }
+
+          /* Forzar fondo blanco */
+          html, body {
+            background-color: white !important;
+            background-image: none !important;
+          }
+
+          /* Overlay de carga para previsualización LEGO */
+          #lego-preview-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.95), rgba(255, 140, 0, 0.95));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s;
+            backdrop-filter: blur(2px);
+          }
+
+          #lego-preview-loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+          }
+
+          .lego-preview-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ffffff;
+            border-radius: 50%;
+            animation: lego-preview-spin 1s linear infinite;
+            margin-bottom: 20px;
+          }
+
+          @keyframes lego-preview-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+
+          .lego-preview-message {
+            color: #ffffff;
+            font-family: 'Dortmund', Arial, sans-serif;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            animation: lego-preview-pulse 2s ease-in-out infinite;
+          }
+
+          @keyframes lego-preview-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+          }
+        </style>
+
+        <style class="dark-mode-stylesheet" disabled="disabled" style="display: none;">
+          html,
+          body {
+            background-color: black;
+          }
+
+          html,
+          body,
+          .table,
+          .btn-outline-dark {
+            color: #d3d3d3;
+          }
+
+          .btn {
+            color: #ffffff;
+          }
+
+          .paintbrush-controls-button {
+            background-color: #1c1c1c;
+          }
+
+          .btn-warning,
+          .dropdown-item {
+            color: #212529;
+          }
+
+          .card {
+            background-color: rgb(33, 33, 33, 0.6);
+          }
+
+          .nav-tabs .nav-item.show .nav-link,
+          .nav-tabs .nav-link.active {
+            background-color: rgb(33, 33, 33, 0.6);
+            border-color: rgb(50, 50, 50);
+          }
+
+          .nav-tabs {
+            border-bottom: 0;
+          }
+
+          table {
+            border-top: 1px solid rgb(50, 50, 50);
+            border-left: 1px solid rgb(50, 50, 50);
+          }
+
+          td,
+          th {
+            border-bottom: 1px solid rgb(50, 50, 50);
+            border-right: 1px solid rgb(50, 50, 50);
+          }
+
+          .table thead th {
+            border-bottom: 1px solid rgb(50, 50, 50);
+            border-top: 1px solid rgb(50, 50, 50);
+          }
+        </style>
+      </head>
+
+      <body style="background-color: white;">
+        <canvas id="background-image-cache-canvas" hidden></canvas>
+        
+        <!-- Overlay de carga para previsualización LEGO -->
+        <div id="lego-preview-loading-overlay">
+          <div class="lego-preview-spinner"></div>
+          <div class="lego-preview-message">🧱 Generando previsualización LEGO...</div>
+        </div>
+        
+        <!-- Barras de progreso ocultas para mantener funcionalidad en segundo plano -->
+        <div id="universal-loading-progress" style="display: none;"></div>
+        <div id="universal-loading-progress-complement" style="display: none;"></div>
+
+    <div id="steps-row" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;" hidden>
+    <div id="step-1" style="max-width: 400px; width: 100%; display: none; margin: 0 auto 0 25vw; flex-direction: column; align-items: center;">
+            <div style="text-align:center; font-size:1.2em; font-weight:bold; margin-bottom:20px; color:#111; font-family:'Inter', sans-serif;">AJUSTA TU IMAGEN Y DALE A "LISTO"</div>
+            <div class="card" style="padding: 10px; margin-bottom: 10px; background: #fff !important; border:none !important; box-shadow:none !important;">
+              <ul class="nav nav-tabs 3d-selector-tabs" role="tablist" style="display: none;">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    id="step-1-color-tab"
+                    data-toggle="tab"
+                    href="#step-1-color-tab-content"
+                    role="tab"
+                    aria-controls="step-1-color-tab-content"
+                    aria-selected="true"
+                    >Color</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="step-1-depth-tab"
+                    data-toggle="tab"
+                    href="#step-1-depth-tab-content"
+                    role="tab"
+                    aria-controls="step-1-color-depth-content"
+                    aria-selected="false"
+                    >Depth</a
+                  >
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div
+                  class="tab-pane fade show active"
+                  id="step-1-color-tab-content"
+                  role="tabpanel"
+                  aria-labelledby="step-1-color-tab"
+                >
+                  <div style="width: 100%">
+                    <div class="main-image-frame">
+                      <canvas id="step-1-canvas-upscaled" style="width: 100%" class="cropper-img"></canvas>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                      <button id="go-to-step4-button" class="btn btn-primary-custom">LISTO</button>
+                    </div>
+                  </div>
+                  <div id="step-1-accordion">
+                    <div class="card accordion-card" style="display: none;">
+                      <div class="card-header" id="step-1-1-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-1-1-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-1-1-collapse"
+                          >
+                            RESOLUTION
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-1-1-collapse"
+                        class="collapse"
+                        aria-labelledby="step-1-1-heading"
+                        data-parent="#step-1-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <b>TARGET RESOLUTION:</b>
+                          <div style="width: 100%">
+                            <div>
+                              WIDTH:
+                              <span id="width-text" data-toggle="tooltip" title="" data-placement="top">50</span>
+                            </div>
+                            <input
+                              type="range"
+                              id="width-slider"
+                              name="points"
+                              min="16"
+                              max="128"
+                              step="16"
+                              value="50"
+                              style="width: 100%"
+                            />
+                          </div>
+                          <div style="width: 100%">
+                            <div>
+                              HEIGHT:
+                              <span id="height-text" data-toggle="tooltip" title="" data-placement="top">50</span>
+                            </div>
+                            <input
+                              type="range"
+                              id="height-slider"
+                              name="points"
+                              min="16"
+                              max="128"
+                              step="16"
+                              value="50"
+                              style="width: 100%"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card" id="enable-depth-button-container" style="display: none;">
+                      <div class="card-header" id="step-1-2-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-1-2-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-1-2-collapse"
+                          >
+                            3D
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-1-2-collapse"
+                        class="collapse"
+                        aria-labelledby="step-1-2-heading"
+                        data-parent="#step-1-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <button class="btn btn-info" type="button" id="enable-depth-button" style="margin-top: 8px">
+                            Enable 3D
+                          </button>
+                          <small>
+                            <div>
+                              <p style="margin-top: 4px; margin-left: 4px; margin-bottom: 8px">
+                                Enabling 3D mode allows for designing pictures with multiple layers, where some pixels
+                                protrude further out than others
+                              </p>
+                              <p style="margin-top: 4px; margin-left: 4px; margin-bottom: 8px">
+                                This may not be a good fit for all images, but can work quite well in many cases
+                              </p>
+                            </div>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card" style="display: none;">
+                      <div class="card-header" id="step-1-4-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-1-4-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-1-4-collapse"
+                          >
+                            Increase Limit
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-1-4-collapse"
+                        class="collapse"
+                        aria-labelledby="step-1-4-heading"
+                        data-parent="#step-1-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <button
+                            class="btn btn-warning"
+                            type="button"
+                            id="resolution-limit-increase-button"
+                            style="margin-bottom: 12px; margin-top: 8px"
+                          >
+                            Increase Resolution Limit
+                          </button>
+                          <small>
+                            <div>
+                              <b style="color: #ff4c00">Important</b>
+                              <p>
+                                Be careful when using high resolutions - this can cause performance issues on less powerful
+                                machines, especially during pdf generation and for 3D previews
+                              </p>
+                            </div>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Contenedor para el botón de imagen cuando se muestra en el step -->
+                  <div id="image-input-new" style="display: none;"></div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="step-1-depth-tab-content"
+                  role="tabpanel"
+                  aria-labelledby="step-1-depth-tab-content"
+                >
+                  <canvas id="web-worker-input-canvas" hidden></canvas>
+                  <canvas id="web-worker-output-canvas" hidden></canvas>
+                  <canvas id="step-1-depth-canvas" hidden></canvas>
+                  <canvas id="step-1-depth-canvas-upscaled" style="width: 100%"></canvas>
+                  <small className="step-header-subtitle">GET DEPTH MAP</small><br />
+                  <small className="step-header-subtitle">DEPTH MAP CROPPING WILL MATCH INPUT IMAGE</small>
+                  <div id="step-1-depth-accordion">
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-1-depth-1-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-1-depth-1-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-1-depth-1-collapse"
+                          >
+                            Select
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-1-depth-1-collapse"
+                        class="collapse"
+                        aria-labelledby="step-1-depth-1-heading"
+                        data-parent="#step-1-depth-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <input
+                            type="file"
+                            id="input-depth-image-selector-hidden"
+                            name="input-depth-image-selector-hidden"
+                            hidden
+                          />
+                          <button
+                            class="btn btn-success"
+                            type="button"
+                            id="input-depth-image-selector"
+                            style="margin-top: 8px"
+                          >
+                            Select Depth Map Image
+                          </button>
+                          <br />
+                          <small
+                            >If you have a depth map corresponding to your image you can select it here. If you don't, you
+                            can generate an approximation in the 'generate' section.
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-1-depth-2-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-1-depth-2-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-1-depth-2-collapse"
+                          >
+                            Generate
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-1-depth-2-collapse"
+                        class="collapse"
+                        aria-labelledby="step-1-depth-2-heading"
+                        data-parent="#step-1-depth-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <button class="btn btn-success" type="button" id="generate-depth-image" style="margin-top: 8px">
+                            Compute Using DNN
+                          </button>
+                          <br />
+                          <small>This will compute an approximation of the depth map if you do not have one </small>
+                          <h5 style="margin-top: 4px" id="web-worker-loading-message" hidden></h5>
+                          <div>
+                            <small>
+                              <b style="color: #ff4c00">Important</b>
+                              <br />
+                              <p>
+                                Computing the depth map can be computationally expensive. Be prepared to wait a bit, and be
+                                careful, especially if you have a less powerful device.
+                              </p>
+                              <b>How does this work?</b>
+                              <p>
+                                The depth map is computed using a DNN (deep neural network). For the reasons described in
+                                the 'about' section, everything is run entirely within the browser, using a modified version
+                                of
+                                <a href="https://github.com/microsoft/onnxjs" target="_blank">ONNX.js</a>. The model used is
+                                <a href="https://github.com/intel-isl/MiDaS" target="_blank">MiDaS</a>
+                                - more specifically, the small ONNX version which can be found
+                                <a href="https://github.com/intel-isl/MiDaS/releases/tag/v2_1" target="_blank">here</a>.
+                              </p>
+                              <div class="card" style="margin-top: 4px; margin-bottom: 16px; padding: 2px">
+                                <b>Citation for Model Used</b>
+                                <span>
+                                  Ranftl, René, Katrin Lasinger, David Hafner, Konrad Schindler, and Vladlen Koltun.
+                                  "Towards robust monocular depth estimation: Mixing datasets for zero-shot cross-dataset
+                                  transfer." (2020).
+                                  <i>IEEE Transactions on Pattern Analysis and Machine Intelligence</i></span
+                                >
+                              </div>
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+                  <!-- Botón CONSTRUIR eliminado por requerimiento del usuario -->
+          <!-- Canvas ocultos del STEP 2 necesarios para el JavaScript -->
+          <canvas id="step-2-canvas" hidden></canvas>
+          <canvas id="step-2-canvas-upscaled" hidden></canvas>
+          <canvas id="step-2-depth-canvas-cropper-buffer" hidden></canvas>
+          <canvas id="step-2-depth-canvas" hidden></canvas>
+          <canvas id="step-2-depth-canvas-upscaled" hidden></canvas>
+
+          <!-- Elementos ocultos necesarios para el algoritmo de interpolación -->
+          <div style="display: none;">
+            <button id="interpolation-algorithm-button">Browser Default</button>
+            <div id="interpolation-algorithm-options"></div>
+            <div id="num-depth-levels-text">3</div>
+            <input id="num-depth-levels-slider" type="range" min="2" max="4" value="3" />
+            <div id="depth-threshold-sliders-containers">
+              <input type="range" min="0" max="255" value="128" />
+            </div>
+          </div>
+
+          <div id="step-3" class="col-6 col-md-3">
+            <div class="card" style="padding: 10px; margin-bottom: 10px">
+              <ul class="nav nav-tabs 3d-selector-tabs" role="tablist" style="display: none;">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    id="step-3-color-tab"
+                    data-toggle="tab"
+                    href="#step-3-color-tab-content"
+                    role="tab"
+                    aria-controls="step-1-color-tab-content"
+                    aria-selected="true"
+                    >Color</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="step-3-depth-tab"
+                    data-toggle="tab" 
+                    href="#step-3-depth-tab-content"
+                    role="tab"
+                    aria-controls="step-1-color-depth-content"
+                    aria-selected="false"
+                    >Depth</a
+                  >
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div
+                  class="tab-pane fade show active"
+                  id="step-3-color-tab-content"
+                  role="tabpanel"
+                  aria-labelledby="step-3-color-tab"
+                >
+                    <!-- STEP 3 restaurado oculto para compatibilidad con el JS -->
+                    <canvas id="step-3-canvas" hidden></canvas>
+                    <canvas id="step-3-canvas-upscaled" style="width: 100%; display: none;"></canvas>
+                    <div style="display: none;">
+                      <h4>STEP 3</h4>
+                      <small class="step-header-subtitle">PROCESS IMAGE WITH FIXED COLOR PALETTE</small>
+                      <br />
+                      <span
+                        data-toggle="tooltip"
+                        title="This is the average per pixel quantization error. The lower this value is, the closer this image is to the image in step 2 (according to the chosen color distance function)"
+                        data-placement="top"
+                      >
+                        <small>Average</small> &#x3F5;:
+                        <small id="step-3-quantization-error"></small>
+                      </span>
+                    </div>
+
+                  <div id="step-3-accordion">
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-3-2-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-3-2-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-3-2-collapse"
+                          >
+                            Available Colors
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-3-2-collapse"
+                        class="collapse"
+                        aria-labelledby="step-3-2-heading"
+                        data-parent="#step-3-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <div id="custom-stud-map-controls" style="margin-top: 4px">
+                            <div style="margin-bottom: 20px">
+                              <small>
+                                <p style="margin-left: 4px; margin-bottom: 8px">
+                                  &#9679; This section specifies how many pieces of each color you have available to create
+                                  the image
+                                </p>
+                                <p style="margin-left: 4px; margin-bottom: 8px">&#9679; Color names are bricklink colors</p>
+                                <p style="margin-left: 4px; margin-bottom: 8px">
+                                  &#9679; Step 4 of the algorithm cannot run unless you select enough pieces to fill the
+                                  picture ('Missing Pieces' must be 0)
+                                </p>
+                                <p style="margin-left: 4px; margin-bottom: 8px">
+                                  &#9679; If you're working with an existing set, then clear the available pieces and use
+                                  the mix in option to add in the pieces from your set.
+                                </p>
+                                <b>Required Pieces: <span id="required-studs"></span></b><br />
+                                <b>Available Pieces: <span id="available-studs"></span></b><br />
+                                <b>Missing Pieces: <span id="missing-studs"></span></b><br />
+                              </small>
+                            </div>
+                            <div class="btn-group" style="margin-bottom: 10px;">
+                              <button
+                                class="btn dropdown-toggle btn-info"
+                                type="button"
+                                id="select-starting-custom-stud-map-button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                              >
+                                Starting Custom Stud Map
+                              </button>
+                              <div
+                                class="dropdown-menu"
+                                id="select-starting-custom-stud-map-options"
+                                aria-labelledby="select-starting-custom-stud-map-button"
+                              ></div>
+                            </div>
+                            <div style="margin-left: 4px; margin-bottom: 10px;">
+                              <small id="input-stud-map-description"></small>
+                            </div>
+                            <div style="padding-bottom: 10px; display: none;">
+                              <button class="btn btn-warning" type="button" id="clear-custom-studs-button">
+                                Clear Available Pieces
+                              </button>
+                            </div>
+                            <div
+                              class="checkbox"
+                              style="margin-top: 4px; margin-left: 4px"
+                              id="infinite-piece-count-check-container"
+                            >
+                              <label class="checkbox-clickable">
+                                <input type="checkbox" class="checkbox-clickable" id="infinite-piece-count-check" />
+                                <span style="font-size: 13px">Infinite Piece Counts</span>
+                              </label>
+                            </div>
+                            <div style="margin-left: 4px" id="forced-infinite-piece-count-warning" hidden>
+                              <small>
+                                <p>
+                                  <b>Important</b>: Infinite piece counts were used, since a linear error dithering
+                                  algorithm was selected in the
+                                  <span style="font-weight: 550">'Quantization'</span>
+                                  section, or a variable piece type was selected in the
+                                  <span style="font-weight: 550">'Pixel Piece'</span>
+                                  section
+                                </p>
+                              </small>
+                            </div>
+                            <div style="margin-left: 4px">
+                              <small>
+                                <p>
+                                  <b>Note</b>: Any colors painted using the paintbrush are assumed to exist when infinite
+                                  piece counts are enabled
+                                </p>
+                              </small>
+                            </div>
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Color</th>
+                                  <th scope="col">Number Available</th>
+                                </tr>
+                              </thead>
+                              <tbody id="custom-stud-table-body"></tbody>
+                            </table>
+                            <div style="padding-bottom: 10px">
+                            </div>
+                            <div style="padding-bottom: 10px">
+                              <a id="export-stud-map-button" download="selected-studs.json" href="””">
+                                <button class="btn btn-info" type="button">Export Selected Studs</button>
+                              </a>
+                            </div>
+                            <div style="padding-bottom: 10px">
+                              <button
+                                class="btn btn-info"
+                                type="button"
+                                id="load-fixed-palette-button"
+                                style="display: none;"
+                              >
+                                Loading Color Palette...
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Sección Pixel Piece -->
+                    <div class="card accordion-card hide-on-step-3-expansion" style="display: none !important;">
+                      <div class="card-header" id="step-3-3-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-3-3-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-3-3-collapse"
+                          >
+                            Pixel Piece
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-3-3-collapse"
+                        class="collapse"
+                        aria-labelledby="step-3-3-heading"
+                        data-parent="#step-3-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <div class="checkbox" style="margin-top: 4px; margin-left: 4px">
+                            <div class="btn-group">
+                              <button
+                                class="btn dropdown-toggle btn-outline-dark"
+                                type="button"
+                                id="bricklink-piece-button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                              >
+                                Bricklink Pixel Piece
+                              </button>
+                              <div
+                                class="dropdown-menu"
+                                id="bricklink-piece-options"
+                                aria-labelledby="stud-map-button"
+                              ></div>
+                            </div>
+                            <div id="pixel-dimensions-container-wrapper" hidden style="margin-top: 8px; margin-bottom: 2px">
+                              <small>
+                                <p style="margin-bottom: 8px">
+                                  <b>Important</b>: Since a variable size pixel type was selected,
+                                  <span style="font-weight: 550">'Infinite Piece Counts'</span>
+                                  under
+                                  <span style="font-weight: 550">'Available Colors'</span>
+                                  was enabled - be careful!
+                                </p>
+                              </small>
+                              <b>Available Dimensions:</b>
+                              <div id="pixel-dimensions-container"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card hide-on-step-3-expansion" style="display: none !important;">
+                      <div class="card-header" id="step-3-4-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-3-4-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-3-4-collapse"
+                          >
+                            Quantization
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-3-4-collapse"
+                        class="collapse"
+                        aria-labelledby="step-3-4-heading"
+                        data-parent="#step-3-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <div style="margin-left: 4px">
+                            <small>
+                              <b style="margin-bottom: 2px">Color Distance Function </b>
+                              <p style="margin-bottom: 8px; margin-top: 4px">
+                                &#9679; This setting determines which distance function is used to align pixels to their
+                                closest Lego colors
+                              </p>
+                            </small>
+                            <button
+                              class="btn dropdown-toggle btn-outline-dark"
+                              type="button"
+                              id="distance-function-button"
+                              data-toggle="dropdown"
+                            >
+                              Euclidean RGB
+                            </button>
+                            <div class="dropdown-menu" id="distance-function-options"></div>
+                          </div>
+                          <div style="margin-top: 12px; margin-left: 4px">
+                            <small>
+                              <b style="margin-bottom: 2px">Quantization Algorithm </b>
+                              <p style="margin-bottom: 8px; margin-top: 4px">
+                                &#9679; This determines what strategy is used for aligning pixels
+                              </p>
+                              <p style="margin-bottom: 8px; margin-top: 4px">
+                                &#9679; Some algorithms run faster than others - be careful when running the greedy
+                                algorithms on larger images
+                              </p>
+                            </small>
+                            <button
+                              class="btn dropdown-toggle btn-outline-dark"
+                              type="button"
+                              id="quantization-algorithm-button"
+                              data-toggle="dropdown"
+                            >
+                              2 Phase
+                            </button>
+                            <div class="dropdown-menu" id="quantization-algorithm-options"></div>
+                          </div>
+                          <div
+                            style="margin-top: 4px; margin-left: 4px"
+                            class="traditional-dithering-algorithm-warning"
+                            hidden
+                          >
+                            <small>
+                              <p style="margin-bottom: 8px">
+                                <b>Important</b>: Since this is a linear error dithering algorithm,
+                                <span style="font-weight: 550">'Infinite Piece Counts'</span>
+                                under
+                                <span style="font-weight: 550">'Available Colors'</span>
+                                was enabled - be careful!
+                              </p>
+                            </small>
+                          </div>
+                          <div style="margin-left: 4px" class="traditional-dithering-algorithm-warning" hidden>
+                            <small>
+                              <p>
+                                It's often best to use
+                                <span style="font-weight: 550">'Euclidean RGB'</span>
+                                for the color distance function, for mathematical cleanliness
+                              </p>
+                            </small>
+                          </div>
+                          <div style="margin-top: 12px; margin-left: 4px" id="color-ties-resolution-section">
+                            <small>
+                              <b style="margin-bottom: 2px">Color Tie Resolution Strategy </b>
+                              <p style="margin-bottom: 4px">
+                                Changing this is useful if you have a large background but not enough pieces to fill it out
+                                uniformly in step 4
+                              </p>
+                            </small>
+                            <div class="btn-group">
+                              <button
+                                class="btn dropdown-toggle btn-outline-dark"
+                                type="button"
+                                id="color-ties-resolution-button"
+                                data-toggle="dropdown"
+                              >
+                                Strategy: Alternating Mod
+                              </button>
+                              <div class="dropdown-menu" id="color-ties-resolution-options"></div>
+                            </div>
+                            <div style="padding-top: 4px; padding-right: 12px; width: 100%">
+                              <div>
+                                Blocking Factor:
+                                <span id="color-tie-grouping-factor-text">1</span>
+                              </div>
+                              <input
+                                type="range"
+                                id="color-tie-grouping-factor-slider"
+                                name="color-tie-grouping-factor-slider"
+                                min="1"
+                                max="5"
+                                step="1"
+                                value="1"
+                                style="width: 100%"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  id="step-3-depth-tab-content"
+                  role="tabpanel"
+                  aria-labelledby="step-3-depth-tab-content"
+                >
+                  <canvas id="step-3-depth-canvas" hidden></canvas>
+                  <canvas id="step-3-depth-canvas-upscaled" style="width: 100%"></canvas>
+                  <h4>STEP 3</h4>
+                  <small className="step-header-subtitle">ADJUST DEPTH MAP</small>
+                  <div id="step-3-depth-accordion">
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-3-depth-1-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-3-depth-1-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-3-depth-1-collapse"
+                          >
+                            Edit Depth
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-3-depth-1-collapse"
+                        class="collapse"
+                        aria-labelledby="step-3-depth-1-heading"
+                        data-parent="#step-3-depth-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <div style="margin-left: 4px; margin-top: 8px">
+                            <button class="btn btn-warning" type="button" id="clear-depth-overrides-button">
+                              Clear Overrides
+                            </button>
+                          </div>
+                          <small>
+                            <p style="margin-top: 4px; margin-left: 4px; margin-bottom: 4px">
+                              &#9679; Click a pixel to increase its height
+                            </p>
+                            <p style="margin-top: 4px; margin-left: 4px; margin-bottom: 4px">
+                              &#9679; Click a pixel to decrease its height
+                            </p>
+                          </small>
+
+                          <button
+                            style="margin-top: 8px; margin-left: 4px"
+                            class="btn btn-info"
+                            type="button"
+                            id="toggle-depth-expansion-button"
+                          >
+                            Expand Picture
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+  <div id="step-4" style="max-width: 400px; width: 100%; display: none; margin: 0 25vw 0 auto; flex-direction: column; align-items: center;">
+            <div class="card" style="padding: 10px; margin-bottom: 10px; background: #fff !important; border:none !important; box-shadow:none !important;">
+              <ul class="nav nav-tabs 3d-selector-tabs" role="tablist" style="display: none;">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    id="step-4-color-tab"
+                    data-toggle="tab"
+                    href="#step-4-color-tab-content"
+                    role="tab"
+                    aria-controls="step-4-color-tab-content"
+                    aria-selected="true"
+                    >Color</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="step-4-depth-tab"
+                    data-toggle="tab"
+                    href="#step-4-depth-tab-content"
+                    role="tab"
+                    aria-controls="step-4-depth-tab-content"
+                    aria-selected="true"
+                    >Depth</a
+                  >
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div
+                  class="tab-pane fade show active"
+                  id="step-4-color-tab-content"
+                  role="tabpanel"
+                  aria-labelledby="step-4-color-tab"
+                >
+                  <canvas id="step-4-canvas" hidden></canvas>
+                  <canvas id="bricklink-cache-canvas" hidden></canvas>
+                  <canvas id="step-4-canvas-upscaled" style="width: 100%"></canvas>
+                  <br />
+                  <div className="step-header-subtitle text-danger" id="nonzero-missing-pieces-warning" hidden>
+                    <small>Image processing requires proper color configuration</small>
+                  </div>
+                  <span
+                    data-toggle="tooltip"
+                    title="This is the average per pixel quantization error. The lower this value is, the closer this image is to the image in step 2 (according to the chosen color distance function). If this is significantly higher than the quantization error from step 3, see 'Pieces Missing From Step 3' under 'Pieces Used' to determine which additional pieces can be used to improve the image."
+                    data-placement="top"
+                  >
+                    <small id="step-4-quantization-error" style="display:none;"></small>
+                  </span>
+                  <div id="step-4-accordion">
+                    <!-- Nueva sección: EDICIÓN DE IMAGEN -->
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-1-edicion-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-1-edicion-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-1-edicion-collapse"
+                          >
+                            EDIT
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-1-edicion-collapse"
+                        class="collapse"
+                        aria-labelledby="step-1-edicion-heading"
+                        data-parent="#step-1-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <!-- Saturación -->
+                          <div style="width: 100%; margin-bottom: 20px;">
+                            <div>
+                              SATURATION
+                              <span id="saturation-text">0%</span>
+                            </div>
+                            <div style="display: flex; direction: horizontal; width: 100%; margin-bottom: 8px">
+                              <button class="btn btn-sm" id="saturation-decrement" style="flex-grow: 0">-</button>
+                              <input
+                                type="range"
+                                id="saturation-slider"
+                                name="points"
+                                min="-100"
+                                max="100"
+                                style="flex-grow: 1; min-width: 10px"
+                              />
+                              <button class="btn btn-sm" id="saturation-increment" style="flex-grow: 0">+</button>
+                            </div>
+                            <button class="btn btn-info btn-sm" type="button" id="reset-saturation-button">Reset Saturation</button>
+                          </div>
+
+                          <!-- Brillo -->
+                          <div style="width: 100%; margin-bottom: 20px;">
+                            <div>
+                              BRIGHTNESS
+                              <span id="brightness-text">0</span>
+                            </div>
+                            <div style="display: flex; direction: horizontal; width: 100%; margin-bottom: 8px">
+                              <button class="btn btn-sm" id="brightness-decrement" style="flex-grow: 0">-</button>
+                              <input
+                                type="range"
+                                id="brightness-slider"
+                                name="points"
+                                min="-128"
+                                max="128"
+                                style="flex-grow: 1; min-width: 10px"
+                              />
+                              <button class="btn btn-sm" id="brightness-increment" style="flex-grow: 0">+</button>
+                            </div>
+                            <button class="btn btn-info btn-sm" type="button" id="reset-brightness-button">Reset Brightness</button>
+                          </div>
+
+                          <!-- Contraste -->
+                          <div style="width: 100%;">
+                            <div>
+                              CONTRAST
+                              <span id="contrast-text">0</span>
+                            </div>
+                            <div style="display: flex; direction: horizontal; width: 100%; margin-bottom: 8px">
+                              <button class="btn btn-sm" id="contrast-decrement" style="flex-grow: 0">-</button>
+                              <input
+                                type="range"
+                                id="contrast-slider"
+                                name="points"
+                                min="-128"
+                                max="128"
+                                style="flex-grow: 1; min-width: 10px"
+                              />
+                              <button class="btn btn-sm" id="contrast-increment" style="flex-grow: 0">+</button>
+                            </div>
+                            <button class="btn btn-info btn-sm" type="button" id="reset-contrast-button">Reset Contrast</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-4-1-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-4-1-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-4-1-collapse"
+                          >
+                            Pieces Used
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-4-1-collapse"
+                        class="collapse"
+                        aria-labelledby="step-4-1-heading"
+                        data-parent="#step-4-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <div style="margin-left: 4px; margin-bottom: 2px; margin-top: 8px">
+                            <b>Pieces Used in Final Image </b>
+                          </div>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Color</th>
+                                <th scope="col" id="pieces-used-dimensions-header" hidden>Dimensions</th>
+                                <th scope="col">Number Used</th>
+                              </tr>
+                            </thead>
+                            <tbody id="studs-used-table-body"></tbody>
+                          </table>
+                          
+                          <div id="studs-missing-container" hidden>
+                            <div style="margin-left: 4px; margin-bottom: 2px; margin-top: 8px">
+                              <b>Pieces Missing From Step 3 </b>
+                            </div>
+                            <div style="margin-left: 4px; margin-bottom: 2px; margin-top: 8px">
+                              <small
+                                >Adding these pieces will allow the image from step 4 to match the image from step 3
+                              </small>
+                            </div>
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Color</th>
+                                  <th scope="col">Number Missing</th>
+                                </tr>
+                              </thead>
+                              <tbody id="studs-missing-table-body"></tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card" id="bricklink-export-card">
+                      <div class="card-header" id="step-4-2-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-4-2-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-4-2-collapse"
+                          >
+                            Export Piece List
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-4-2-collapse"
+                        class="collapse"
+                        aria-labelledby="step-4-2-heading"
+                        data-parent="#step-4-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <button
+                            type="button"
+                            id="export-to-bricklink-button"
+                            class="btn btn-info"
+                            style="margin-bottom: 10px; margin-top: 8px"
+                          >
+                            Copy Bricklink XML to Clipboard
+                          </button>
+                          <br />
+                          <small>
+                            <p style="margin-left: 4px; margin-bottom: 4px">
+                            </p>
+                            <p style="margin-left: 4px; margin-bottom: 4px">
+                              <a href="https://www.bricklink.com/v2/wanted/upload.page" target="_blank">
+                              </a>
+                            </p>
+                            <p style="margin-left: 4px">
+                              <a href="https://www.lego.com/en-us/page/static/pick-a-brick" target="_blank">
+                              </a>
+                            </p>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-4-3-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-4-3-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-4-3-collapse"
+                          >
+                            Instructions
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-4-3-collapse"
+                        class="collapse"
+                        aria-labelledby="step-4-3-heading"
+                        data-parent="#step-4-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <div class="progress" style="height: 37px" id="pdf-progress-container" hidden>
+                            <div
+                              class="progress-bar"
+                              id="pdf-progress-bar"
+                              role="progressbar"
+                              style="background-color: #17a2b8; transition: none"
+                            ></div>
+                          </div>
+                          <div id="instructions-canvas-container" hidden></div>
+                          <button
+                            type="button"
+                            id="download-instructions-button"
+                            class="btn btn-info"
+                            style="margin-top: 8px"
+                          >
+                            Generate Instructions PDF
+                          </button>
+                          <button
+                            type="button"
+                            id="go-to-cart-button"
+                            class="btn btn-success"
+                            style="margin-top: 8px; margin-left: 8px"
+                            onclick="window.open('https://visubloq.com/cart', '_blank')"
+                          >
+                            🛒 Ir al Carrito
+                          </button>
+                          <div class="checkbox" style="margin-top: 4px; margin-left: 4px">
+                            <label class="checkbox-clickable">
+                              <input type="checkbox" class="checkbox-clickable" id="high-quality-instructions-check" />
+                              <span style="font-size: 13px">High quality pdf</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane fade show"
+                  id="step-4-depth-tab-content"
+                  role="tabpanel"
+                  aria-labelledby="step-4-depth-tab"
+                >
+                  <div id="step-4-canvas-3d-upscaled" style="width: 100%"></div>
+                  <h4 style="margin-top: 4px; padding-bottom: 4px">3D Preview</h4>
+                  <small className="step-header-subtitle"
+                    >If you can't see the 3D effect when hovering your mouse over the image, check the input from depth step
+                    1</small
+                  >
+                  <div id="step-4-depth-accordion">
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-4-depth-1-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-4-depth-1-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-4-depth-1-collapse"
+                          >
+                            Tips
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-4-depth-1-collapse"
+                        class="collapse"
+                        aria-labelledby="step-4-depth-1-heading"
+                        data-parent="#step-4-depth-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <div style="width: 100%">
+                            <div>
+                              <small id="height-text"><b>Preview effect intensity</b></small>
+                            </div>
+                            <input
+                              type="range"
+                              id="3d-effect-intensity"
+                              name="points"
+                              min="0.015"
+                              max="0.03"
+                              step="0.005"
+                              value="0.01"
+                              style="width: 100%"
+                            />
+                          </div>
+                          <small>
+                            <p style="margin-left: 4px; margin-bottom: 8px">
+                              &#9679; This is a (very) rough preview of what the 3D effect might look like
+                            </p>
+                            <p style="margin-left: 4px; margin-bottom: 8px">
+                              &#9679; Hover your mouse over the image to vary the perspective
+                            </p>
+                            <p style="margin-left: 4px; margin-bottom: 8px">
+                              &#9679; Make sure your depth map is not blank
+                            </p>
+                            <p style="margin-left: 4px; margin-bottom: 8px">
+                              &#9679; This is unlikely to work well on less powerful devices, since this is generated
+                              dynamically
+                            </p>
+                            <p style="margin-left: 4px; margin-bottom: 8px">
+                              &#9679; Keep in mind that the effect varies from browser to browser, can be subtle, and may
+                              not be 100% representative of what the physical art piece would look like
+                            </p>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-4-depth-4-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-4-depth-4-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-4-depth-4-collapse"
+                          >
+                            Depth Plates
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-4-depth-4-collapse"
+                        class="collapse"
+                        aria-labelledby="step-4-depth-4-heading"
+                        data-parent="#step-4-depth-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <small>
+                            <p style="margin-left: 4px; margin-bottom: 4px">
+                              &#9679; This is the set of plates that may be used to generate depth instructions and piece
+                              lists
+                            </p>
+                            <p style="margin-left: 4px; margin-bottom: 4px">
+                              &#9679; These pieces are used as padding so that the correct pixels protrude outwards
+                            </p>
+                            <p style="margin-left: 4px; margin-bottom: 4px">
+                              &#9679; Note that larger plates may be difficult to attach/detach from the base
+                            </p>
+                            <b style="margin-left: 4px; margin-bottom: 2px">Available Plates:</b>
+                          </small>
+                          <div id="depth-plates-container"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-4-depth-2-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-4-depth-2-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-4-depth-2-collapse"
+                          >
+                            Instructions
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-4-depth-2-collapse"
+                        class="collapse"
+                        aria-labelledby="step-4-depth-2-heading"
+                        data-parent="#step-4-depth-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <div class="progress" style="height: 37px" id="depth-pdf-progress-container" hidden>
+                            <div
+                              class="progress-bar"
+                              id="depth-pdf-progress-bar"
+                              role="progressbar"
+                              style="background-color: #17a2b8; transition: none"
+                            ></div>
+                          </div>
+                          <button
+                            type="button"
+                            id="download-depth-instructions-button"
+                            class="btn btn-info"
+                            style="margin-top: 8px"
+                          >
+                            Generate Depth Instructions PDF
+                          </button>
+                          <div id="depth-instructions-canvas-container" hidden></div>
+                          <div class="checkbox" style="margin-top: 4px; margin-left: 4px">
+                            <label class="checkbox-clickable">
+                              <input
+                                type="checkbox"
+                                class="checkbox-clickable"
+                                id="high-quality-depth-instructions-check"
+                              />
+                              <span style="font-size: 13px">High quality pdf</span>
+                            </label>
+                          </div>
+                          <small>
+                            <p style="margin-left: 4px; margin-bottom: 4px">
+                              Longer instructions may be split into multiple files
+                            </p>
+                          </small>
+                          <div style="margin-left: 4px; margin-bottom: 4px">
+                            <small>
+                              <b style="color: #ff4c00">Important</b>
+                              <p>
+                                Depending on your hardware and the resolution you've chosen, the pdf can take quite a few
+                                seconds to generate. Be prepared to wait if you're generating instructions for larger
+                                resolutions, especially for high quality pdfs. Larger resolutions may also cause some
+                                slowness on the page or may not work at all on less powerful devices, so I recommend
+                                starting at the default and then going up.
+                              </p>
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card accordion-card">
+                      <div class="card-header" id="step-4-depth-3-heading">
+                        <h5 class="mb-0">
+                          <button
+                            class="btn btn-link collapsed"
+                            data-toggle="collapse"
+                            data-target="#step-4-depth-3-collapse"
+                            aria-expanded="false"
+                            aria-controls="step-4-depth-3-collapse"
+                          >
+                            Pieces Used
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="step-4-depth-3-collapse"
+                        class="collapse"
+                        aria-labelledby="step-4-depth-3-heading"
+                        data-parent="#step-4-depth-accordion"
+                      >
+                        <div class="card-body accordion-card-body">
+                          <button
+                            type="button"
+                            id="export-depth-to-bricklink-button"
+                            class="btn btn-info"
+                            disabled
+                            style="margin-bottom: 10px; margin-top: 8px"
+                          >
+                            Copy Bricklink XML to Clipboard
+                          </button>
+                          <small style="margin-left: 4px">
+                            <a href="https://www.bricklink.com/v2/wanted/upload.page" target="_blank">
+                            </a>
+                          </small>
+                          <br />
+                          <small style="margin-left: 4px">
+                            <a href="https://www.lego.com/en-us/page/static/pick-a-brick" target="_blank">
+                            </a>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="image-input-card" style="text-align: center; padding-top: 40px; width: 100%;">
+          <div class="row">
+            <div class="col-sm">
+              <canvas id="input-canvas" hidden></canvas>
+              <canvas id="input-depth-canvas" hidden></canvas>
+              <span id="image-input">
+                <input type="file" id="input-image-selector-hidden" name="input-image-selector-hidden" hidden />
+                <div>
+                  <button class="btn btn-success" type="button" id="input-image-selector">
+                    SELECT IMAGE
+                  </button>
+                </div>
+              </span>
+              <small hidden
+                ><a
+                  target="_blank"
+                  id="hogwarts-crest-example-instructions-link"
+                  href="assets/pdf/lego-art-remix-discount-hogwarts-crest-instructions.pdf"
+                >
+                  Example use case</a
+                >
+                - this is a full Hogwarts crest created by the algorithm with just 1 copy of
+                <a
+                  target="_blank"
+                  id="31201-lego-website-link"
+                  href="https://www.lego.com/en-us/product/harry-potter-hogwarts-crests-31201"
+                  >set 31201</a
+                ></small
+              >
+              <span id="run-example-input-container" style="display: none;">
+                <span style="margin-left: 8px; margin-right: 8px; font-weight: 600">Or</span>
+                <button class="btn btn-success" type="button" id="run-example-input" disabled>See an Example</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-body" style="padding-bottom: 10px; margin-top: 10px" id="metrics-card" hidden>
+          <div class="row">
+            <div class="col-sm">
+              <h5>
+                <a data-toggle="collapse" href="#metrics" aria-expanded="false" aria-controls="metrics"> Usage Metrics </a>
+              </h5>
+              <div class="collapse" id="metrics">
+                <small>
+                  <p style="margin-bottom: 4px">
+                    Note: No user data is stored, so this is just aggregated info based on simple increments
+                  </p>
+                </small>
+                <div>
+                  <table id="input-image-count-table">
+                    <tr>
+                      <th>Date</th>
+                      <th>Images created</th>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </div> -->
+
+        <!-- Add firebase to log performance -->
+        <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-database.js"></script>
+        <script>
+          firebase.initializeApp({
+            apiKey: "AIzaSyDZpG-5SrDxpwV9kmbwNiiKXJhg-qaH1d8",
+            authDomain: "lego-art-remix-stats.firebaseapp.com",
+            databaseURL: "https://lego-art-remix-stats.firebaseio.com",
+            projectId: "lego-art-remix-stats",
+            storageBucket: "lego-art-remix-stats.appspot.com",
+            messagingSenderId: "622482243553",
+            appId: "1:622482243553:web:3ef8ee3f3796190528dca0",
+          });
+        </script>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script
+          src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+          crossorigin="anonymous"
+        ></script>
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+          crossorigin="anonymous"
+        ></script>
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+          crossorigin="anonymous"
+        ></script>
+
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"
+          integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/"
+          crossorigin="anonymous"
+        ></script>
+        <script src="https://d3js.org/d3.v5.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-color-difference"></script>
+        
+        <!-- EmailJS para envío de emails -->
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+        
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.min.js"
+          integrity="sha512-IlZV3863HqEgMeFLVllRjbNOoh8uVj0kgx0aYxgt4rdBABTZCl/h5MfshHD9BrnVs6Rs9yNN7kUQpzhcLkNmHw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+        ></script>
+        <script src="js/pixi.min.js"></script>
+        <script src="js/bricklink-colors.js"></script>
+        <script src="js/stud-maps.js"></script>
+        <script src="js/heap.js"></script>
+        <script src="js/algo.js"></script>
+        <script src="js/index.js"></script>
+        <script src="js/visubloq-capture.js"></script>
+        <script src="js/shopify-config-public.js"></script>
+        <script src="js/shopify-metafields.js"></script>
+        <script src="js/metrics.js"></script>
+        <script src="js/visubloq-ultra-simple.js"></script>
+
+        <script>
+          // note that the disableServiceWorker param only disables new service worker registration
+          if ("serviceWorker" in navigator && !window.location.href.match(/disableServiceWorker/gi)) {
+            navigator.serviceWorker
+              .register("service-worker.js")
+              .then(function (registration) {
+                console.log("Service worker registration successful, scope is:", registration.scope);
+              })
+              .catch(function (error) {
+                console.error("Service worker registration failed, error:", error);
+              });
+          }
+        </script>
+      </body>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var step1 = document.getElementById('step-1');
+      var step4 = document.getElementById('step-4');
+      var goToStep4Btn = document.getElementById('go-to-step4-button');
+      // Mostrar solo step1 al inicio
+      if (step1) step1.style.display = 'flex';
+      if (step4) step4.style.display = 'none';
+      if (goToStep4Btn) {
+        goToStep4Btn.addEventListener('click', function() {
+          if (step1) step1.style.display = 'none';
+          if (step4) step4.style.display = 'flex';
+          if (typeof runStep4 === 'function') runStep4();
+        });
+      }
+    });
+    </script>
+    </html>
